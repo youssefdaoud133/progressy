@@ -75,15 +75,15 @@ const userschema = new mongoose.Schema({
             },
             city : {
                 type : String,
-                 default : 'City',
+                 default : '',
             },
             country : {
                 type : String,
-                 default : 'Country',
+                 default : '',
             },
             postalcode : {
                 type : String,
-                 default : 'Postal code',
+                 default : '',
         }
     
 },

@@ -96,6 +96,31 @@ app.patch("/MyProfile/changes" ,auth, async(req,res) =>{
 
 
 
+// upload avatar
+
+const multer = require("multer")
+// const sharp = require("sharp")
+
+    const upload = multer({
+        limits :  1000000,
+    
+     fileFilter(req,file,cb){
+        if(!file.originalname.match(/\.(jpg|jpeg|png|PNG)$/)){
+            return cb(new Error("jpg or jpeg or png only"))
+         }
+         cb(undefined,true)
+     }
+    })
+
+
+    app.post("/insertnew/avatar", auth,upload.single(req.body.avatar),async (req,res)=>{
+       req.user.avatar = req.file.buffer
+       await req.user.save()
+       res.send()
+
+    },(error,req,res,next) =>{
+        res.status(400).send({error : error.message})
+    })
 
 
 

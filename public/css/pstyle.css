@@ -318,7 +318,9 @@ h6,
   font-weight: 600;
   line-height: 1.5;
 }
-
+/* #image_input{ */
+  /* display: none; */
+/* } */
 hr {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -1546,6 +1548,8 @@ a.text-white:focus {
 
 .card-profile-image img:hover {
   transform: translate(-50%, -33%);
+  cursor: pointer;
+  opacity: 30%;
 }
 
 .card-profile-stats {

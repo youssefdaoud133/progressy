@@ -1,8 +1,38 @@
 const g = console.log
+let imagepath
+let chk = false 
 g("this is client side (profile sitting)")
 let allchanges = []
 const btnchange = document.querySelector("#btnchange") 
+const image_input = document.querySelector("#image_input")
+const actualBtn = image_input;
 
+const fileChosen = document.getElementById('file-chosen');
+const bodyformdata = new FormData()
+
+const chpic = async() =>{
+//    await axios({
+//         method: "post",
+//         url: "/insertnew/avatar",
+//         data: bodyformdata,
+//         // body : {token : window.localStorage.token},
+//         headers: { "Content-Type": "multipart/form-data" },
+//       })
+      await axios.post("/insertnew/avatar",{
+        token : window.localStorage.token,
+        bodyformdata
+      })
+}
+
+image_input.addEventListener('change', function(){
+    imagepath = this.files[0].name
+    bodyformdata.append('avatar', imagepath); 
+    bodyformdata.append('token', window.localStorage.token); 
+    chpic()
+})
+
+
+// image_input.click()
 let oldinformation , information = {
             
         welcomephrase : document.querySelector(".display-2"),
@@ -93,24 +123,38 @@ information.work.addEventListener("click" , checkchange)
 
 
 
-const changeinf = async() =>{
+const changeinf = async(e) =>{
+    e.preventDefault()
+    let chk = false
     let finalchangeobj = {}
     let finalchangeobjedit = {address : {}}
     allchanges.forEach(async (allchange) =>{
         if(allchange === "address" || allchange === "city"||allchange === "country" || allchange === "postalcode"){
            
             finalchangeobjedit.address[allchange] = information.address[allchange].value
-            const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :finalchangeobjedit})
-
+            // const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :finalchangeobjedit})
+            //   g(data)
+            // loaduser()
         }else{
         finalchangeobj[allchange] = information[allchange].value
-        const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :finalchangeobj})
+        // const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :finalchangeobj})
+       
+        
 
        }
     })
+    let merged
+    if(finalchangeobjedit.address.address){
+         merged = {...finalchangeobj, ...finalchangeobjedit};
+    }else{
+         merged = {...finalchangeobj};
+    }
     g(finalchangeobj)
-     const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :finalchangeobj})
+     const data = await axios.patch("/MyProfile/changes",{token : window.localStorage.token , newupdates :merged})
      loaduser()
+
+     allchanges= []
+
     g(data)
    
 } 
